@@ -18,6 +18,14 @@ namespace NoteEditor.Model
             Settings.WorkSpacePath.Value = string.IsNullOrEmpty(dto.workSpacePath)
                 ? Application.persistentDataPath
                 : dto.workSpacePath;
+
+            Settings.MusicPath.Value = string.IsNullOrEmpty(dto.musicPath)
+                ? Application.persistentDataPath
+                : dto.musicPath;
+
+            Settings.NotesPath.Value = string.IsNullOrEmpty(dto.notesPath)
+                ? Application.persistentDataPath
+                : dto.notesPath;
         }
 
         public static string Serialize()
@@ -25,6 +33,8 @@ namespace NoteEditor.Model
             var data = new SettingsDTO();
 
             data.workSpacePath = Settings.WorkSpacePath.Value;
+            data.musicPath = Settings.MusicPath.Value;
+            data.notesPath = Settings.NotesPath.Value;
             data.maxBlock = EditData.MaxBlock.Value;
             data.noteInputKeyCodes = Settings.NoteInputKeyCodes.Value
                 .Take(EditData.MaxBlock.Value)

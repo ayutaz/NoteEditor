@@ -6,6 +6,8 @@ namespace NoteEditor.DTO
     public class SettingsDTO
     {
         public string workSpacePath;
+        public string musicPath;
+        public string notesPath;
         public int maxBlock;
         public List<int> noteInputKeyCodes;
 
@@ -14,6 +16,8 @@ namespace NoteEditor.DTO
             return new SettingsDTO
             {
                 workSpacePath = "",
+                musicPath = "Music",
+                notesPath = "Notes",
                 maxBlock = 5,
                 noteInputKeyCodes = new List<int> { 114, 99, 103, 121, 98 }
             };

@@ -35,8 +35,10 @@ namespace NoteEditor.Presenter
             undoButton.OnClickAsObservable().Subscribe(_ => ChangeLocationCommandManager.Undo());
             redoButton.OnClickAsObservable().Subscribe(_ => ChangeLocationCommandManager.Redo());
 
-            Settings.WorkSpacePath
-                .Subscribe(workSpacePath => directoryPathInputField.text = Path.Combine(workSpacePath, "Musics"));
+            Observable.Merge(
+                     Settings.WorkSpacePath.AsUnitObservable(),
+                     Settings.MusicPath.AsUnitObservable())
+                .Subscribe(v => directoryPathInputField.text = Path.Combine(Settings.WorkSpacePath.Value, Settings.MusicPath.Value));
 
             directoryPathInputField.OnValueChangedAsObservable()
                 .Subscribe(path => MusicSelector.DirectoryPath.Value = path);
