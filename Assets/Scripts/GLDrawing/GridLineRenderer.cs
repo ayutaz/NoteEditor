@@ -6,6 +6,7 @@ using System.Linq;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NoteEditor.GLDrawing
 {
@@ -21,6 +22,9 @@ namespace NoteEditor.GLDrawing
         Color beatLineColor2 = default;
         [SerializeField]
         Color beatLineColor3 = default;
+        [SerializeField]
+        Color modelLineColor = default;
+        [SerializeField] float modelheight = 160;
 
         [Space, SerializeField]
         BeatNumberRenderer numberRender = default;
@@ -42,19 +46,24 @@ namespace NoteEditor.GLDrawing
         // private
         float cachedZeroSamplePosX = -1f;
         float cachedCanvasWidth = 0f;
+        float cachedModelSize = 0f;
         int[] beatSamples = new int[1];
         Line[] beatLines = new Line[1];
         Line[] blockLines = new Line[1];
+        Line[] modelLines = new Line[1];
 
         public void LateUpdate()
         {
             if (Audio.Source == null || Audio.Source.clip == null)
                 return;
 
+            // 1拍あたりのサンプリング数
             var unitBeatSamples = Mathf.FloorToInt(Audio.Source.clip.frequency * 60f / EditData.BPM.Value);
+            // 1曲あたりの拍数
             var beatNum = EditData.LPB.Value * Mathf.CeilToInt(Audio.Source.clip.samples / (float)unitBeatSamples);
 
-            if (beatSamples.Length != beatNum || cachedCanvasWidth != NoteCanvas.Width.Value)
+            // 縦ライン
+            if (beatSamples.Length != beatNum || cachedCanvasWidth != NoteCanvas.Width.Value || cachedModelSize != EditData.ModelSize.Value)
             {
                 beatSamples = Enumerable.Range(0, beatNum)
                     .Select(i => i * unitBeatSamples / EditData.LPB.Value)
@@ -70,6 +79,23 @@ namespace NoteEditor.GLDrawing
 
                 cachedZeroSamplePosX = beatLines[0].start.x;
                 cachedCanvasWidth = NoteCanvas.Width.Value;
+
+                // 手本用
+                var models = new List<Line>();
+                var size = EditData.LPB.Value * EditData.ModelSize.Value * 4;
+                for (int i = 0; i < beatNum - size; i+= size * 2)
+                {
+                    var start = ConvertUtils.SamplesToCanvasPositionX(beatSamples[i]);
+                    var end = ConvertUtils.SamplesToCanvasPositionX(beatSamples[i+ size]);
+                    var line = new Line(
+                        ConvertUtils.CanvasToScreenPosition(new Vector3(start, modelheight, 0)),
+                        ConvertUtils.CanvasToScreenPosition(new Vector3(end, modelheight, 0)),
+                        modelLineColor
+                    );
+                    models.Add(line);
+                }
+                modelLines = models.ToArray();
+                cachedModelSize = EditData.ModelSize.Value;
             }
             else
             {
@@ -81,10 +107,15 @@ namespace NoteEditor.GLDrawing
                     beatLines[i].end.x = (beatLines[i].start.x += diffX);
                     beatLines[i].color = BeatLineColor(i);
                 }
-
+                for (int i = 0; i < modelLines.Length; i++)
+                {
+                    modelLines[i].start.x += diffX;
+                    modelLines[i].end.x += diffX;
+                }
                 cachedZeroSamplePosX = currentX;
             }
 
+            // 横ライン
             if (blockLines.Length != EditData.MaxBlock.Value)
             {
                 blockLines = Enumerable.Range(0, EditData.MaxBlock.Value)
@@ -149,11 +180,14 @@ namespace NoteEditor.GLDrawing
                     {
                         numberRender.Render(
                             new Vector3(beatLines[i].start.x, Screen.height / 2f + 154 / NoteCanvas.ScaleFactor.Value, 0),
-                            i / (EditData.LPB.Value * 4));
+                            i / (EditData.LPB.Value * 4)
+                        );
                     }
                 }
             }
             numberRender.End();
+
+            GLLineDrawer.Draw(modelLines);
 
             GLLineDrawer.Draw(blockLines);
         }

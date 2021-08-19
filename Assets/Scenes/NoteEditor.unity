@@ -1795,6 +1795,8 @@ MonoBehaviour:
   beatLineColor1: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.5019608}
   beatLineColor2: {r: 1, g: 1, b: 1, a: 0.5019608}
   beatLineColor3: {r: 0.6862745, g: 1, b: 0.30588236, a: 1}
+  modelLineColor: {r: 1, g: 0.5019608, b: 0, a: 1}
+  modelheight: 140
   numberRender: {fileID: 1498374438}
 --- !u!1 &245668761
 GameObject:
