@@ -15,6 +15,7 @@ namespace NoteEditor.Model
             dto.BPM = EditData.BPM.Value;
             dto.maxBlock = EditData.MaxBlock.Value;
             dto.offset = EditData.OffsetSamples.Value;
+            dto.modelSize = EditData.ModelSize.Value;
             dto.name = Path.GetFileNameWithoutExtension(EditData.Name.Value);
 
             var sortedNoteObjects = EditData.Notes.Values
@@ -56,6 +57,7 @@ namespace NoteEditor.Model
             EditData.BPM.Value = editData.BPM;
             EditData.MaxBlock.Value = editData.maxBlock;
             EditData.OffsetSamples.Value = editData.offset;
+            EditData.ModelSize.Value = editData.modelSize;
 
             foreach (var note in editData.notes)
             {

@@ -72,7 +72,8 @@ namespace NoteEditor.Presenter
                     NoteCanvas.OffsetX.AsUnitObservable(),
                     Audio.SmoothedTimeSamples.AsUnitObservable(),
                     NoteCanvas.Width.AsUnitObservable(),
-                    EditData.OffsetSamples.AsUnitObservable())
+                    EditData.OffsetSamples.AsUnitObservable(),
+                    EditData.ModelSize.AsUnitObservable())
                 .Select(_ => CurrentSamples.Value)
                 .Subscribe(x =>
                 {

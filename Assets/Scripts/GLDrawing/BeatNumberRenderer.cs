@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace NoteEditor.GLDrawing
 {
-    public class BeatNumberRenderer : SingletonMonoBehaviour<BeatNumberRenderer>
+    public class BeatNumberRenderer : MonoBehaviour
     {
         [SerializeField]
         GameObject beatNumberPrefab = default;
@@ -14,60 +14,60 @@ namespace NoteEditor.GLDrawing
         List<RectTransform> rectTransformPool = new List<RectTransform>();
         List<Text> textPool = new List<Text>();
 
-        static int size;
-        static int countPrevActive = 0;
-        static int countCurrentActive = 0;
+        int size;
+        int countPrevActive = 0;
+        int countCurrentActive = 0;
 
-        static public void Render(Vector3 pos, int number)
+        public void Render(Vector3 pos, int number)
         {
             if (countCurrentActive < size)
             {
                 if (countCurrentActive >= countPrevActive)
                 {
-                    Instance.textPool[countCurrentActive].gameObject.SetActive(true);
+                    textPool[countCurrentActive].gameObject.SetActive(true);
                 }
 
-                Instance.rectTransformPool[countCurrentActive].position = pos;
-                Instance.textPool[countCurrentActive].text = number.ToString();
+                rectTransformPool[countCurrentActive].position = pos;
+                textPool[countCurrentActive].text = number.ToString();
             }
             else
             {
-                var obj = Instantiate(Instance.beatNumberPrefab, pos, Quaternion.identity) as GameObject;
-                obj.transform.SetParent(Instance.transform);
+                var obj = Instantiate(beatNumberPrefab, pos, Quaternion.identity) as GameObject;
+                obj.transform.SetParent(transform);
                 obj.transform.localScale = Vector3.one;
-                Instance.rectTransformPool.Add(obj.GetComponent<RectTransform>());
-                Instance.textPool.Add(obj.GetComponent<Text>());
+                rectTransformPool.Add(obj.GetComponent<RectTransform>());
+                textPool.Add(obj.GetComponent<Text>());
                 size++;
             }
 
             countCurrentActive++;
         }
 
-        static public void Begin()
+        public void Begin()
         {
             countPrevActive = countCurrentActive;
             countCurrentActive = 0;
         }
 
-        static public void End()
+        public void End()
         {
             if (countCurrentActive < countPrevActive)
             {
                 for (int i = countCurrentActive; i < countPrevActive; i++)
                 {
-                    Instance.textPool[i].gameObject.SetActive(false);
+                    textPool[i].gameObject.SetActive(false);
                 }
             }
 
             if (countCurrentActive * 2 < size)
             {
-                foreach (var text in Instance.textPool.Skip(countCurrentActive + 1))
+                foreach (var text in textPool.Skip(countCurrentActive + 1))
                 {
                     Destroy(text.gameObject);
                 }
 
-                Instance.rectTransformPool.RemoveRange(countCurrentActive, size - countCurrentActive);
-                Instance.textPool.RemoveRange(countCurrentActive, size - countCurrentActive);
+                rectTransformPool.RemoveRange(countCurrentActive, size - countCurrentActive);
+                textPool.RemoveRange(countCurrentActive, size - countCurrentActive);
                 size = countCurrentActive;
             }
         }
