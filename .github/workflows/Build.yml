@@ -8,7 +8,8 @@ on:
   workflow_dispatch: { }
   push:
     branches:
-      - main
+      - develop
+      - release
     paths-ignore:
       - '.github/**'
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -46,12 +47,19 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to Close Publish
         uses: JamesIves/github-pages-deploy-action@4.1.7
+        if: ${{ github.head_ref }} == 'develop'
         with:
           branch: close-build
           folder: build
-      
+
+      - name: Deploy to Open Publish
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        if: ${{ github.head_ref }} == 'release'
+        with:
+          branch: open-build
+          folder: build
       
       # Output
       - uses: actions/upload-artifact@v2
