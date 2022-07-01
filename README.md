@@ -1,11 +1,14 @@
 # Note Editor [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](https://github.com/setchi/NoteEditor/blob/master/LICENSE) [![Release](https://img.shields.io/github/release/setchi/NoteEditor.svg?style=flat-square&logo=github)](https://github.com/setchi/NoteEditor/releases/latest)
+
 音楽ゲーム用の譜面エディタです。
 現在wav形式の音楽ファイルのみ対応しています。[English](https://translate.google.com/translate?sl=ja&tl=en&u=https://github.com/setchi/NoteEditor) (by Google Translate)
 
 ![screenshot](screenshot.png)
 
 ## コマンド一覧
+
 ### 一般的なコマンド
+
 | アクション | コマンド |
 |:-----------|:------------|
 | 元に戻す     |   Ctrl + Z    |
@@ -13,6 +16,7 @@
 | 保存する     |   Ctrl + S    |
 
 ### 譜面の操作
+
 | アクション | コマンド |
 |:-----------|:------------|
 | 拡大/縮小する | 上下矢印キー / Ctrl + マウスホイール |
@@ -27,6 +31,7 @@
 | コピー対象を張り付ける       |     Ctrl + V     |
 
 ### ノーツ編集モードの操作
+
 | アクション | コマンド |
 |:-----------|:------------|
 | ノーツ編集モードを切替える | Alt |
@@ -34,7 +39,9 @@
 | ロングノーツ編集モードを解除する      |   右クリック / Esc    |
 
 ## 開発環境
-Unity 2019.1.5f1
+
+Unity 2021.3.5f1
 
 ## LICENSE
-[MIT](https://github.com/setchi/NoteEditor/blob/master/LICENSE)
+
+[MIT](https://github.com/ayutaz/NoteEditor/blob/main/LICENSE)
